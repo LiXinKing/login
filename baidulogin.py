@@ -35,9 +35,14 @@ if __name__=='__main__':
     ###########获取callback#############################3
     callback1 = ctxt.locals.callback()
     ###########获取token#############################3
+
+    tokenUrl = "https://passport.baidu.com/v2/api/?getapi&tpl=mn&apiver=v3&tt=%s&class=login" \
+    "&gid=%s&logintype=dialogLogin&callback=%s" % (time.time()*1000, gid, callback1)
+
+    """
     tokenUrl="https://passport.baidu.com/v2/api/?getapi&tpl=netdisk&subpro=netdisk_web&apiver=v3" \
              "&tt=%d&class=login&gid=%s&logintype=basicLogin&callback=%s"%(time.time()*1000,gid,callback1)
-
+    """
     token_response = s.get(tokenUrl)
     pattern = re.compile(r'"token"\s*:\s*"(\w+)"')
     match = pattern.search(token_response.text)
@@ -49,8 +54,14 @@ if __name__=='__main__':
     ###########获取callback#############################3
     callback2 = ctxt.locals.callback()
     ###########获取rsakey和pubkey#############################3
+
+    rsaUrl = "https://passport.baidu.com/v2/getpublickey?token=%s&tpl=mn&" \
+    "apiver=v3&tt=%s&gid=%s&callback=%s" % (token, time.time()*1000, gid, callback2)
+
+    """
     rsaUrl = "https://passport.baidu.com/v2/getpublickey?token=%s&" \
              "tpl=netdisk&subpro=netdisk_web&apiver=v3&tt=%d&gid=%s&callback=%s"%(token,time.time()*1000,gid,callback2)
+    """
     rsaResponse = s.get(rsaUrl)
     pattern = re.compile("\"key\"\s*:\s*'(\w+)'")
     match = pattern.search(rsaResponse.text)
@@ -69,7 +80,7 @@ if __name__=='__main__':
     else:
         raise Exception
     ################加密password########################3
-    pre_password = 'xxxxxxxxxx'
+    pre_password = 'a444989527'
     pubkey = pubkey.replace('\\n','\n').replace('\\','')
     rsakey = RSA.importKey(pubkey)
     cipher = PKCS1_v1_5.new(rsakey)
